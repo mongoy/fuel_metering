@@ -225,6 +225,18 @@ color: rgb(0, 0, 255);</string>
       <height>22</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="editable">
+     <bool>true</bool>
+    </property>
+    <property name="currentText">
+     <string>Выберете ...</string>
+    </property>
    </widget>
    <widget class="QLabel" name="lbl_8">
     <property name="enabled">

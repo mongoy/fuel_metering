@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-
+# pyuic5 -x fuel.ui -o fuel.py
+import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5 import QtSql
 from PyQt5.QtSql import QSqlQuery
+from PyQt5.Qt import *
 
 
 class Ui_MainWindow(object):
@@ -94,6 +96,11 @@ class Ui_MainWindow(object):
         self.calendar.setObjectName("calendar")
         self.cBox_drive = QtWidgets.QComboBox(self.centralwidget)
         self.cBox_drive.setGeometry(QtCore.QRect(680, 230, 301, 22))
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        self.cBox_drive.setFont(font)
+        self.cBox_drive.setEditable(True)
         self.cBox_drive.setObjectName("cBox_drive")
         self.lbl_8 = QtWidgets.QLabel(self.centralwidget)
         self.lbl_8.setEnabled(True)
@@ -213,6 +220,7 @@ class Ui_MainWindow(object):
         self.lbl_3.setText(_translate("MainWindow", "Заправки (л):"))
         self.lbl_4.setText(_translate("MainWindow", "Расход (л):"))
         self.lbl_5.setText(_translate("MainWindow", "Остатки на конец месяца месяца (л):"))
+        self.cBox_drive.setCurrentText(_translate("MainWindow", "Выберете ..."))
         self.lbl_8.setText(_translate("MainWindow", "По городу (км):"))
         self.lbl_13.setText(_translate("MainWindow", "Автомобиль:"))
         self.lbl_9.setText(_translate("MainWindow", " -  с кондиционером (км):"))
@@ -229,12 +237,56 @@ class DB_connection():
     database.open()
 
 
+class MainWindow(QMainWindow, Ui_MainWindow):
+    def __init__(self):
+        super(MainWindow, self).__init__()
+        self.setupUi(self)
+        self.details(False)
+
+        # add lists
+        ts_list = ["Prado", "L-200", "УАЗ"]
+        self.cBox_drive.addItems(ts_list)
+
+        # calendar
+        self.lbl_1.setText(f'{self.lbl_1.text()} {self.calendar.selectedDate().toString("MMMM yyyy")}')
+        self.calendar.clicked.connect(self.show_month_func)
+
+        # combo_box
+        self.cBox_drive.view().pressed.connect(self.handler_pressed)
+        # buttons
+
+
+    def details(self, visible):
+        # отключим / подключим подробности по ТС
+        self.lbl_7.setVisible(visible)
+        self.lbl_8.setVisible(visible)
+        self.lbl_9.setVisible(visible)
+        self.lbl_10.setVisible(visible)
+        self.lbl_11.setVisible(visible)
+        self.lbl_12.setVisible(visible)
+        self.btn_report_D.setVisible(visible)
+        self.btn_report_M.setVisible(visible)
+        # if visible == True:
+        #     print(self.cBox_drive.currentText())
+        #     # self.statusbar.showMessage(self.cBox_drive.currentText())
+
+    def show_month_func(self):
+        # output select month on window
+        self.lbl_1.setText(f'Дата отчёта: {self.calendar.selectedDate().toString("MMMM yyyy")}')
+
+    def handler_pressed(self):
+        # handler pressed combobox
+        pass
+
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    DB_connection()
+    # MainWindow = QtWidgets.QMainWindow()
+    # ui = Ui_MainWindow()
+    # ui.setupUi(MainWindow)
+    # MainWindow.show()
+    # DB_connection()
+    w = MainWindow()
+    w.show()
     sys.exit(app.exec_())
