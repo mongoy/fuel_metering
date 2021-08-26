@@ -231,12 +231,6 @@ class Ui_MainWindow(object):
         self.btn_report_D.setText(_translate("MainWindow", "Отчёт за день"))
 
 
-class DB_connection():
-    database = QtSql.QSqlDatabase.addDatabase('QSQLITE')
-    database.setDatabaseName('fuel.db')
-    database.open()
-
-
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -253,8 +247,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # combo_box
         self.cBox_drive.view().pressed.connect(self.handler_pressed)
+
         # buttons
 
+        # work
+        self.disply_data()
+
+    def disply_data(self):
+        # connection to database, make rquest
+        self.connect = QtSql.QSqlDatabase.addDatabase('QSQLITE')
+        self.connect.setDatabaseName('fuel.db')
+        self.connect.open()
+        #
+        self.connect.close()
 
     def details(self, visible):
         # отключим / подключим подробности по ТС
