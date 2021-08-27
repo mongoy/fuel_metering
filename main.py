@@ -257,8 +257,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # connection to database, make rquest
         self.connect = QtSql.QSqlDatabase.addDatabase('QSQLITE')
         self.connect.setDatabaseName('fuel.db')
-        self.connect.open()
-        #
+        # self.connect.open()
+        if self.connect.open():
+            print("open DB success.")
+        query = QSqlQuery()
+        query.prepare('select * from driver')
+        if not query.exec_():
+            query.lastError()
+        else:
+            while query.next():
+                print(query.value(1))
+
         self.connect.close()
 
     def details(self, visible):
@@ -281,7 +290,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def handler_pressed(self):
         # handler pressed combobox
-        pass
+        self.details(True)
 
 
 if __name__ == "__main__":

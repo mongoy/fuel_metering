@@ -227,6 +227,7 @@ color: rgb(0, 0, 255);</string>
     </property>
     <property name="font">
      <font>
+      <pointsize>10</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
